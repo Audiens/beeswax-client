@@ -1,5 +1,7 @@
 # BeesWax API PHP client
 
+[![Build Status](https://travis-ci.org/Audiens/beeswax-client.svg?branch=master)](https://travis-ci.org/Audiens/beeswax-client)
+[![Code Coverage](https://scrutinizer-ci.com/g/Audiens/beeswax-client/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Audiens/beeswax-client/?branch=master)
 ## Implemented features
 
 - [Session login](https://docs.beeswax.com/docs/authentication)
