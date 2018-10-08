@@ -1,0 +1,20 @@
+<phpunit
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/7.3/phpunit.xsd"
+    backupGlobals="true"
+    cacheTokens="false"
+    colors="true"
+    bootstrap="vendor/autoload.php"
+>
+    <testsuites>
+        <testsuite name="BeesWax SDK test suite">
+            <directory>test</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>src</directory>
+        </whitelist>
+    </filter>
+</phpunit>
