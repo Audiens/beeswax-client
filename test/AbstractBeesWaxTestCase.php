@@ -15,8 +15,12 @@ abstract class AbstractBeesWaxTestCase extends TestCase
 {
     protected function setUp()
     {
-        $dotenv = new Dotenv(__DIR__.DIRECTORY_SEPARATOR.'..');
-        $dotenv->load();
+        try {
+            $dotenv = new Dotenv(__DIR__ . DIRECTORY_SEPARATOR . '..');
+            $dotenv->load();
+        } catch (\Exception $ignored) {
+            // .env file might not exist, but it's not a problem
+        }
     }
 
     protected function getSession(): BeesWaxSession
