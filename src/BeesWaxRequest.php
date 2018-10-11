@@ -10,6 +10,7 @@ class BeesWaxRequest
 {
     public const METHOD_GET  = 'GET';
     public const METHOD_POST = 'POST';
+    public const METHOD_PUT  = 'PUT';
 
     protected const BEESWAX_ENDPOINT = 'https://%s.api.beeswax.com%s';
     protected const BEESWAX_UA       = 'Audiens / BeesWax SDK';
@@ -94,6 +95,8 @@ class BeesWaxRequest
 
         if ($this->method === static::METHOD_POST) {
             curl_setopt($curlHandler, CURLOPT_POST, 1);
+        } elseif ($this->method === static::METHOD_PUT) {
+            curl_setopt($curlHandler, CURLOPT_CUSTOMREQUEST, static::METHOD_PUT);
         }
 
         if ($this->payload) {

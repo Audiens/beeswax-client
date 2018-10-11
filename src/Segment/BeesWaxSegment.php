@@ -113,6 +113,36 @@ class BeesWaxSegment
         return $this->aggregateExcludes;
     }
 
+    public function setAlternativeId(?string $alternativeId): void
+    {
+        $this->alternativeId = $alternativeId;
+    }
+
+    public function setAdvertiserId(?int $advertiserId): void
+    {
+        $this->advertiserId = $advertiserId;
+    }
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    public function setDescription(?string $description): void
+    {
+        $this->description = $description;
+    }
+
+    public function setCpmCost(float $cpmCost): void
+    {
+        $this->cpmCost = $cpmCost;
+    }
+
+    public function setAggregateExcludes(bool $aggregateExcludes): void
+    {
+        $this->aggregateExcludes = $aggregateExcludes;
+    }
+
     public function equals(BeesWaxSegment $segment): bool
     {
         foreach (get_object_vars($this) as $key => $value) {

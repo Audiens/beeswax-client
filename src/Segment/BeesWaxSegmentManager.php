@@ -2,6 +2,7 @@
 
 namespace Audiens\BeesWax\Segment;
 
+use Audiens\BeesWax\BeesWaxRequest;
 use Audiens\BeesWax\BeesWaxResponse;
 use Audiens\BeesWax\BeesWaxSession;
 use Audiens\BeesWax\Exception\BeesWaxGenericException;
@@ -9,8 +10,7 @@ use Audiens\BeesWax\Exception\BeesWaxResponseException;
 
 class BeesWaxSegmentManager
 {
-    protected const CREATE_PATH = '/rest/segment';
-    protected const READ_PATH   = '/rest/segment';
+    protected const API_PATH = '/rest/segment';
 
     /** @var BeesWaxSession */
     protected $session;
@@ -60,7 +60,7 @@ class BeesWaxSegmentManager
 
         $payload = json_encode($payloadData);
 
-        $request = $this->session->getRequestBuilder()->build(static::CREATE_PATH, [], 'POST', $payload);
+        $request = $this->session->getRequestBuilder()->build(static::API_PATH, [], BeesWaxRequest::METHOD_POST, $payload);
 
         $response = $request->doRequest();
         $this->manageSuccess($response, 'Error creating segment: %s');
@@ -80,16 +80,6 @@ class BeesWaxSegmentManager
         return $segment;
     }
 
-    public function update(BeesWaxSegment $segment): BeesWaxSegment
-    {
-        throw new \RuntimeException('Not implemented yet!');
-    }
-
-    public function delete(BeesWaxSegment $segment): bool
-    {
-        throw new \RuntimeException('Not implemented yet!');
-    }
-
     /**
      * @param string $id
      *
@@ -99,7 +89,7 @@ class BeesWaxSegmentManager
      */
     public function read(string $id): BeesWaxSegment
     {
-        $request = $this->session->getRequestBuilder()->build(static::READ_PATH, ['segment_id' => $id], 'GET', null);
+        $request = $this->session->getRequestBuilder()->build(static::API_PATH, ['segment_id' => $id], BeesWaxRequest::METHOD_GET, null);
 
         $response = $request->doRequest();
         $this->manageSuccess($response, 'Error reading segment: %s');
@@ -129,6 +119,46 @@ class BeesWaxSegmentManager
         $segment->setId((string)$responseData->segment_id);
 
         return $segment;
+    }
+
+    /**
+     * @param BeesWaxSegment $segment
+     *
+     * @return BeesWaxSegment
+     * @throws BeesWaxGenericException
+     */
+    public function update(BeesWaxSegment $segment): BeesWaxSegment
+    {
+        if ($segment->getId() === null) {
+            throw new BeesWaxGenericException(
+                "Can't update a non-existing segment!",
+                BeesWaxGenericException::CODE_NON_EXISTING_SEGMENT
+            );
+        }
+
+        $payloadData = [
+            'segment_id' => (int)$segment->getId(),
+            'segment_name' => $segment->getName(),
+            'alternative_id' => $segment->getAlternativeId(),
+            'advertiser_id' => $segment->getAdvertiserId(),
+            'segment_description' => $segment->getDescription(),
+            'cpm_cost' => $segment->getCpmCost(),
+            'aggregate_excludes' => $segment->isAggregateExcludes(),
+        ];
+
+        $payload = json_encode($payloadData);
+
+        $request = $this->session->getRequestBuilder()->build(static::API_PATH, [], BeesWaxRequest::METHOD_PUT, $payload);
+
+        $response = $request->doRequest();
+        $this->manageSuccess($response, 'Error updating segment: %s');
+
+        return $segment;
+    }
+
+    public function delete(BeesWaxSegment $segment): bool
+    {
+        throw new \RuntimeException('Not implemented yet!');
     }
 
     /**
