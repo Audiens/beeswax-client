@@ -67,13 +67,19 @@ class BeesWaxRequest
         $cookieFileHandler = tmpfile();
 
         if ($cookieFileHandler === false) {
-            throw new BeesWaxGenericException('Impossible to create a temporary cookie file', BeesWaxGenericException::CODE_CANT_CREATE_COOKIE_FILE);
+            throw new BeesWaxGenericException(
+                'Impossible to create a temporary cookie file',
+                BeesWaxGenericException::CODE_CANT_CREATE_COOKIE_FILE
+            );
         }
 
         $cookieFilePath = stream_get_meta_data($cookieFileHandler)['uri'];
 
         if (!$cookieFilePath) {
-            throw new BeesWaxGenericException('An error occurred creating a temporary cookie file', BeesWaxGenericException::CODE_CANT_CREATE_COOKIE_FILE);
+            throw new BeesWaxGenericException(
+                'An error occurred creating a temporary cookie file',
+                BeesWaxGenericException::CODE_CANT_CREATE_COOKIE_FILE
+            );
         }
 
         $cookieFilePath = realpath($cookieFilePath);

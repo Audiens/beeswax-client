@@ -105,8 +105,15 @@ class BeesWaxSegmentManager
         $this->manageSuccess($response, 'Error reading segment: %s');
 
         $responseData = json_decode($response->getPayload());
-        if (!isset($responseData->payload) || !\is_array($responseData->payload) || \count($responseData->payload) !== 1) {
-            throw new BeesWaxGenericException(sprintf('Segment #%s not found', $id), BeesWaxGenericException::CODE_SEGMENT_NOT_FOUND);
+        if (
+            !isset($responseData->payload)
+            || !\is_array($responseData->payload)
+            || \count($responseData->payload) !== 1
+        ) {
+            throw new BeesWaxGenericException(
+                sprintf('Segment #%s not found', $id),
+                BeesWaxGenericException::CODE_SEGMENT_NOT_FOUND
+            );
         }
         $responseData = $responseData->payload[0];
 
