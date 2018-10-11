@@ -112,4 +112,15 @@ class BeesWaxSegment
     {
         return $this->aggregateExcludes;
     }
+
+    public function equals(BeesWaxSegment $segment): bool
+    {
+        foreach (get_object_vars($this) as $key => $value) {
+            if ($segment->$key !== $this->$key) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

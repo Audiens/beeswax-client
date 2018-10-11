@@ -9,6 +9,9 @@
 
 - [Session login](https://docs.beeswax.com/docs/authentication)
 - [Segment create](https://docs.beeswax.com/docs/segment-1)
+- [Segment read](https://docs.beeswax.com/docs/segment-3)<sup>†</sup>
+
+<sup>†</sup> limited to search by id
 
 ## How to
 

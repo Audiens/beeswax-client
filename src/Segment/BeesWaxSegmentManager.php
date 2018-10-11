@@ -2,6 +2,7 @@
 
 namespace Audiens\BeesWax\Segment;
 
+use Audiens\BeesWax\BeesWaxResponse;
 use Audiens\BeesWax\BeesWaxSession;
 use Audiens\BeesWax\Exception\BeesWaxGenericException;
 use Audiens\BeesWax\Exception\BeesWaxResponseException;
@@ -9,6 +10,7 @@ use Audiens\BeesWax\Exception\BeesWaxResponseException;
 class BeesWaxSegmentManager
 {
     protected const CREATE_PATH = '/rest/segment';
+    protected const READ_PATH   = '/rest/segment';
 
     /** @var BeesWaxSession */
     protected $session;
@@ -61,23 +63,9 @@ class BeesWaxSegmentManager
         $request = $this->session->getRequestBuilder()->build(static::CREATE_PATH, [], 'POST', $payload);
 
         $response = $request->doRequest();
+        $this->manageSuccess($response, 'Error creating segment: %s');
+
         $responseData = json_decode($response->getPayload());
-        $responseErrors = $responseData->errors ?? [];
-        $statusCode = $response->getStatusCode();
-
-        if (
-            !empty($responseErrors)
-            || \is_bool($responseData)
-            || (isset($responseData->success) && !$responseData->success)
-            || $statusCode !== 200
-        ) {
-            $message = \count($responseErrors) ? $responseErrors[0] : ($responseData->message ?? (string) $statusCode);
-            throw new BeesWaxResponseException(
-                $response->getCurlHandler(),
-                sprintf('Error creating segment: %s', $message)
-            );
-        }
-
         $segmentId = $responseData->payload->id ?? null;
 
         if ($segmentId === null) {
@@ -102,8 +90,63 @@ class BeesWaxSegmentManager
         throw new \RuntimeException('Not implemented yet!');
     }
 
-    public function get(string $id): ?BeesWaxSegment
+    /**
+     * @param string $id
+     *
+     * @return BeesWaxSegment
+     * @throws BeesWaxGenericException
+     * @throws BeesWaxResponseException
+     */
+    public function read(string $id): BeesWaxSegment
     {
-        throw new \RuntimeException('Not implemented yet!');
+        $request = $this->session->getRequestBuilder()->build(static::READ_PATH, ['segment_id' => $id], 'GET', null);
+
+        $response = $request->doRequest();
+        $this->manageSuccess($response, 'Error reading segment: %s');
+
+        $responseData = json_decode($response->getPayload());
+        if (!isset($responseData->payload) || !\is_array($responseData->payload) || \count($responseData->payload) !== 1) {
+            throw new BeesWaxGenericException(sprintf('Segment #%s not found', $id), BeesWaxGenericException::CODE_SEGMENT_NOT_FOUND);
+        }
+        $responseData = $responseData->payload[0];
+
+        $segment = new BeesWaxSegment(
+            $responseData->segment_name,
+            $responseData->segment_description,
+            $responseData->alternative_id,
+            $responseData->advertiser_id,
+            $responseData->cpm_cost,
+            $responseData->ttl_days,
+            $responseData->aggregate_excludes
+        );
+        $segment->setId((string)$responseData->segment_id);
+
+        return $segment;
+    }
+
+    /**
+     * @param BeesWaxResponse $response
+     * @param string          $errorFormat with one string parameter
+     *
+     * @throws BeesWaxResponseException
+     */
+    private function manageSuccess(BeesWaxResponse $response, string $errorFormat): void
+    {
+        $responseData = json_decode($response->getPayload());
+        $responseErrors = $responseData->errors ?? [];
+        $statusCode = $response->getStatusCode();
+
+        if (
+            !empty($responseErrors)
+            || \is_bool($responseData)
+            || (isset($responseData->success) && !$responseData->success)
+            || $statusCode !== 200
+        ) {
+            $message = \count($responseErrors) ? $responseErrors[0] : ($responseData->message ?? (string) $statusCode);
+            throw new BeesWaxResponseException(
+                $response->getCurlHandler(),
+                sprintf($errorFormat, $message)
+            );
+        }
     }
 }

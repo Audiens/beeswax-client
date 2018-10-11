@@ -58,7 +58,12 @@ class BeesWaxRequest
      */
     public function doRequest(): BeesWaxResponse
     {
-        $curlHandler = curl_init(sprintf(static::BEESWAX_ENDPOINT, $this->session->getBuzzKey(), $this->path));
+        $curlUrl = sprintf(static::BEESWAX_ENDPOINT, $this->session->getBuzzKey(), $this->path);
+        if (!empty($this->queryParams)) {
+            $query = \http_build_query($this->queryParams);
+            $curlUrl .= '?'.$query;
+        }
+        $curlHandler = curl_init($curlUrl);
         $cookieFileHandler = tmpfile();
 
         if ($cookieFileHandler === false) {
