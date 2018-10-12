@@ -16,7 +16,7 @@ class BeesWaxRequestBuilder
      * @param string               $path
      * @param array                $queryParams
      * @param string               $method
-     * @param null|string|string[] $payload
+     * @param null|string|mixed    $payload
      *
      * @return BeesWaxRequest
      */

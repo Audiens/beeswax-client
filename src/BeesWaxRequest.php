@@ -37,7 +37,7 @@ class BeesWaxRequest
      * @param string               $path
      * @param array                $queryParams
      * @param string               $method
-     * @param null|string|string[] $payload
+     * @param null|string|mixed    $payload
      */
     public function __construct(
         BeesWaxSession $session,

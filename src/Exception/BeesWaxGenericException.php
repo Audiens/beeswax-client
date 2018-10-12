@@ -15,4 +15,5 @@ class BeesWaxGenericException extends Exception
 
     public const CODE_CANT_CREATE_COOKIE_FILE        = 4000;
     public const CODE_ERROR_UPLOADING_SEGMENTS_USERS = 4001;
+    public const CODE_CANT_CREATE_TEMP_FILE          = 4002;
 }

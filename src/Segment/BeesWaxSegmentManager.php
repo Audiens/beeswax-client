@@ -207,6 +207,13 @@ class BeesWaxSegmentManager
         }
 
         $fh = tmpfile();
+        if ($fh === false) {
+            throw new BeesWaxGenericException(
+                'Error attempting to create the temporary file',
+                BeesWaxGenericException::CODE_CANT_CREATE_TEMP_FILE
+            );
+        }
+
         $tmpFilePath = realpath(stream_get_meta_data($fh)['uri']);
         $rows = 0;
         $exceptionToThrow = null;
