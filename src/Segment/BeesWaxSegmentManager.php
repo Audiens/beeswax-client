@@ -219,9 +219,18 @@ class BeesWaxSegmentManager
         $exceptionToThrow = null;
         $fileId = 0;
 
+        $buzzKey = $this->session->getBuzzKey();
+
         try {
             foreach ($userData as $datum) {
-                $rowData = array_merge([$datum->getUserId()], $datum->getSegments());
+                $segments = $datum->getSegments();
+                if ($segmentKeyType === BeesWaxSegment::SEGMENT_KEY_TYPE_DEFAULT) {
+                    $segments = \array_map(function (string $segment) use ($buzzKey) {
+                        return sprintf('%s-%s', $buzzKey, $segment);
+                    }, $segments);
+                }
+
+                $rowData = array_merge([$datum->getUserId()], $segments);
                 fputcsv($fh, $rowData, '|');
                 $rows++;
             }
