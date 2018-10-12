@@ -31,9 +31,8 @@ class BeesWaxSegmentManagerUsersUploadTest extends AbstractBeesWaxTestCase
             $userData[] = new BeesWaxSegmentUserData(Uuid::uuid4()->toString(), [$segmentId]);
         }
 
-        $manager->usersUpload($segment, $userData, $segmentKeyType, $userIdType, $operationType, $continent);
+        $fileId = $manager->usersUpload($segment, $userData, $segmentKeyType, $userIdType, $operationType, $continent);
 
-        // Ensure there are no exceptions running usersUpload
-        TestCase::assertTrue(true);
+        TestCase::assertGreaterThan(0, $fileId);
     }
 }

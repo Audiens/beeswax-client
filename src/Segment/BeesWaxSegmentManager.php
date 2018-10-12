@@ -173,6 +173,8 @@ class BeesWaxSegmentManager
      * @param string                   $operationType BeesWaxSegmentManager::USERS_UPLOAD_OPERATION_TYPE_*
      * @param string                   $continent BeesWaxSegmentManager::USERS_UPLOAD_CONTINENT_*
      *
+     * @return int
+     *
      * @throws BeesWaxGenericException
      *
      * @see BeesWaxSegment::SEGMENT_KEY_TYPE_*
@@ -187,7 +189,7 @@ class BeesWaxSegmentManager
         string $userIdType = BeesWaxSegmentUserData::USER_ID_TYPE_BEESWAX_COOKIE,
         string $operationType = BeesWaxSegmentManager::USERS_UPLOAD_OPERATION_TYPE_ADD_SEGMENTS,
         string $continent = BeesWaxSegmentManager::USERS_UPLOAD_CONTINENT_NAM
-    ): void {
+    ): int {
         if ($segment->getId() === null) {
             throw new BeesWaxGenericException(
                 "Can't add users to a non-existing segment!",
@@ -199,6 +201,7 @@ class BeesWaxSegmentManager
         $tmpFilePath = realpath(stream_get_meta_data($fh)['uri']);
         $rows = 0;
         $exceptionToThrow = null;
+        $fileId = 0;
 
         try {
             foreach ($userData as $datum) {
@@ -218,7 +221,7 @@ class BeesWaxSegmentManager
                     );
                 }
 
-                return;
+                return $fileId;
             }
 
             $fileId = $this->sendUsersUploadMetadata(
@@ -239,6 +242,8 @@ class BeesWaxSegmentManager
         if ($exceptionToThrow !== null) {
             throw $exceptionToThrow;
         }
+
+        return $fileId;
     }
 
     public function delete(BeesWaxSegment $segment): bool
