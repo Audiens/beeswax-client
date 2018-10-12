@@ -69,7 +69,10 @@ class BeesWaxSegmentManager
 
         $payload = json_encode($payloadData);
 
-        $request = $this->session->getRequestBuilder()->build(static::API_CRUD_PATH, [], BeesWaxRequest::METHOD_POST, $payload);
+        $request = $this
+            ->session
+            ->getRequestBuilder()
+            ->build(static::API_CRUD_PATH, [], BeesWaxRequest::METHOD_POST, $payload);
 
         $response = $request->doRequest();
         $this->manageSuccess($response, 'Error creating segment: %s');
@@ -98,7 +101,10 @@ class BeesWaxSegmentManager
      */
     public function read(string $id): BeesWaxSegment
     {
-        $request = $this->session->getRequestBuilder()->build(static::API_CRUD_PATH, ['segment_id' => $id], BeesWaxRequest::METHOD_GET, null);
+        $request = $this
+            ->session
+            ->getRequestBuilder()
+            ->build(static::API_CRUD_PATH, ['segment_id' => $id], BeesWaxRequest::METHOD_GET, null);
 
         $response = $request->doRequest();
         $this->manageSuccess($response, 'Error reading segment: %s');
@@ -157,7 +163,10 @@ class BeesWaxSegmentManager
 
         $payload = json_encode($payloadData);
 
-        $request = $this->session->getRequestBuilder()->build(static::API_CRUD_PATH, [], BeesWaxRequest::METHOD_PUT, $payload);
+        $request = $this
+            ->session
+            ->getRequestBuilder()
+            ->build(static::API_CRUD_PATH, [], BeesWaxRequest::METHOD_PUT, $payload);
 
         $response = $request->doRequest();
         $this->manageSuccess($response, 'Error updating segment: %s');
