@@ -13,10 +13,10 @@ class BeesWaxRequestBuilder
     }
 
     /**
-     * @param string         $path
-     * @param array          $queryParams
-     * @param string         $method
-     * @param null|string    $payload
+     * @param string               $path
+     * @param array                $queryParams
+     * @param string               $method
+     * @param null|string|string[] $payload
      *
      * @return BeesWaxRequest
      */
@@ -24,7 +24,7 @@ class BeesWaxRequestBuilder
         string $path,
         array $queryParams,
         string $method,
-        ?string $payload = null
+        $payload = null
     ): BeesWaxRequest {
         return new BeesWaxRequest($this->session, $path, $queryParams, $method, $payload);
     }

@@ -33,18 +33,18 @@ class BeesWaxRequest
     /**
      * BeesWaxRequest constructor.
      *
-     * @param BeesWaxSession $session
-     * @param string         $path
-     * @param array          $queryParams
-     * @param string         $method
-     * @param null|string    $payload
+     * @param BeesWaxSession       $session
+     * @param string               $path
+     * @param array                $queryParams
+     * @param string               $method
+     * @param null|string|string[] $payload
      */
     public function __construct(
         BeesWaxSession $session,
         string $path,
         array $queryParams,
         string $method,
-        ?string $payload = null
+        $payload = null
     ) {
         $this->path = $path;
         $this->queryParams = $queryParams;

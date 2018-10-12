@@ -4,6 +4,9 @@ namespace Audiens\BeesWax\Segment;
 
 class BeesWaxSegment
 {
+    public const SEGMENT_KEY_TYPE_DEFAULT = 'DEFAULT';
+    public const SEGMENT_KEY_TYPE_ALTERNATIVE = 'ALTERNATIVE';
+
     /** @var string|null */
     protected $id;
 

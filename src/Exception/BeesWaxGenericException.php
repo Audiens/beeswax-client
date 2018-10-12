@@ -13,5 +13,6 @@ class BeesWaxGenericException extends Exception
     public const CODE_SEGMENT_NOT_FOUND       = 3003;
     public const CODE_NON_EXISTING_SEGMENT    = 3004;
 
-    public const CODE_CANT_CREATE_COOKIE_FILE = 4000;
+    public const CODE_CANT_CREATE_COOKIE_FILE        = 4000;
+    public const CODE_ERROR_UPLOADING_SEGMENTS_USERS = 4001;
 }
