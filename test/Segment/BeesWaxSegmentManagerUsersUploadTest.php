@@ -15,8 +15,30 @@ class BeesWaxSegmentManagerUsersUploadTest extends AbstractBeesWaxTestCase
     {
         $session = $this->getSession();
         $session->login(true);
-
         $manager = new BeesWaxSegmentManager($session);
+
+        $fileId = $this->uploadRandomSegmentUsersCsvFile($manager);
+
+        TestCase::assertGreaterThan(0, $fileId);
+    }
+
+    public function testUsersFileUploadStatusPending(): void
+    {
+        $session = $this->getSession();
+        $session->login(true);
+        $manager = new BeesWaxSegmentManager($session);
+
+        $fileId = $this->uploadRandomSegmentUsersCsvFile($manager);
+
+        TestCase::assertGreaterThan(0, $fileId);
+
+        $status = $manager->getUploadSegmentUsersFileStatus($fileId);
+
+        TestCase::assertEquals(BeesWaxSegmentManager::FILE_UPLOAD_STATUS_PENDING, $status);
+    }
+
+    private function uploadRandomSegmentUsersCsvFile(BeesWaxSegmentManager $manager): int
+    {
         $segment = new BeesWaxSegment(Uuid::uuid4()->toString());
         $segmentKeyType = BeesWaxSegment::SEGMENT_KEY_TYPE_DEFAULT;
         $userIdType = BeesWaxSegmentUserData::USER_ID_TYPE_AD_ID;
@@ -31,8 +53,6 @@ class BeesWaxSegmentManagerUsersUploadTest extends AbstractBeesWaxTestCase
             $userData[] = new BeesWaxSegmentUserData(Uuid::uuid4()->toString(), [$segmentId]);
         }
 
-        $fileId = $manager->usersUpload($segment, $userData, $segmentKeyType, $userIdType, $operationType, $continent);
-
-        TestCase::assertGreaterThan(0, $fileId);
+        return $manager->usersUpload($segment, $userData, $segmentKeyType, $userIdType, $operationType, $continent);
     }
 }

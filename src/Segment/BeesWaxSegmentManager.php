@@ -13,6 +13,13 @@ class BeesWaxSegmentManager
     public const USERS_UPLOAD_OPERATION_TYPE_ADD_SEGMENTS         = 'ADD_SEGMENTS';
     public const USERS_UPLOAD_OPERATION_TYPE_REPLACE_ALL_SEGMENTS = 'REPLACE_ALL_SEGMENTS';
 
+    public const FILE_UPLOAD_STATUS_UNEXPECTED_STATUS_CODE = -1;
+    public const FILE_UPLOAD_STATUS_NO_FILE_UPLOADED = 0;
+    public const FILE_UPLOAD_STATUS_PENDING = 1;
+    public const FILE_UPLOAD_STATUS_PROCESSED = 2;
+    public const FILE_UPLOAD_STATUS_ERROR = 3;
+    public const FILE_UPLOAD_STATUS_IN_PROGRESS = 4;
+
     public const USERS_UPLOAD_CONTINENT_NAM  = 'NAM';
     public const USERS_UPLOAD_CONTINENT_EMEA = 'EMEA';
     public const USERS_UPLOAD_CONTINENT_APEC = 'APEC';
@@ -269,6 +276,35 @@ class BeesWaxSegmentManager
         }
 
         return $fileId;
+    }
+
+    /**
+     * @param int    $fileId
+     *
+     * @return int BeesWaxSegmentManager::FILE_UPLOAD_STATUS_*
+     *
+     * @throws BeesWaxGenericException
+     * @throws BeesWaxResponseException
+     */
+    public function getUploadSegmentUsersFileStatus(int $fileId): int
+    {
+        $request = $this->session->getRequestBuilder()->build(
+            static::API_UPLOAD_METADATA_PATH,
+            ['segment_upload_id' => $fileId],
+            BeesWaxRequest::METHOD_GET
+        );
+
+        $response = $request->doRequest();
+        $this->manageSuccess($response, "Error retrieving segment's users file upload status: %s");
+
+        $data = \json_decode($response->getPayload());
+
+        $condition = isset($data->payload)
+            && \is_array($data->payload)
+            && !empty($data->payload)
+            && isset($data->payload[0]->upload_status);
+
+        return $condition ? $data->payload[0]->upload_status : static::FILE_UPLOAD_STATUS_UNEXPECTED_STATUS_CODE;
     }
 
     public function delete(BeesWaxSegment $segment): bool
