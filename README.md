@@ -11,6 +11,7 @@
 - [Segment create](https://docs.beeswax.com/docs/segment-1)
 - [Segment read](https://docs.beeswax.com/docs/segment-3)<sup>†</sup>
 - [Segment's users upload](https://docs.beeswax.com/docs/segment_upload)<sup>†2</sup>
+- [Segment's users file upload status](https://docs.beeswax.com/docs/segment_upload-1)
 
 <sup>†</sup> limited to search by id
 <sup>†2</sup> limited to single file upload, no previous uploaded file
